@@ -51,10 +51,7 @@ class App extends React.Component {
         'heebo-bold': require('./assets/Heebo-Bold.ttf'),
         ...Ionicons.font
       }),
-      Asset.loadAsync(imagesArray),
-      Asset.fromModule(
-        require('react-navigation/src/views/assets/back-icon.png')
-      ).downloadAsync()
+      Asset.loadAsync(imagesArray)
     ]);
   };
 
