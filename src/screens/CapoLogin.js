@@ -19,6 +19,7 @@ import { Skin, DefaultColors } from '../config/Settings';
 import AuthCheck from '../server_store/AuthCheck';
 import i18n from "../../i18n";
 import {AsyncStorage} from 'react-native';
+import Toast from "react-native-tiny-toast";
 
 // TODO: Hard code password for now
 // Add top nav bar with Back button
@@ -63,7 +64,7 @@ class CapoLogin extends React.Component {
       return;
     }
     this.populateUserCredentials();
-  }  
+  }
 
   async populateUserCredentials() {
     try {
@@ -85,15 +86,18 @@ class CapoLogin extends React.Component {
         <RegularText style={styles.instructions}>{i18n.t('screens.capologin.username')}</RegularText>
         <TextInput
           style={styles.textInput}
+          autoCapitalize="none"
           autoFocus={true}
+          autoCompleteType='email'
           onChangeText={this._setUsername}
           value={this.state.username}
         />
         <RegularText style={styles.instructions}>{i18n.t('screens.capologin.password')}</RegularText>
         <TextInput
           style={styles.textInput}
-          autoFocus={true}
+          autoCapitalize="none"
           onChangeText={this._setPassword}
+          autoCompleteType='password'
           value={this.state.password}
           secureTextEntry={true}
         />
@@ -114,37 +118,32 @@ class CapoLogin extends React.Component {
   _setUsername = username => this.setState({ username });
 
   _handlePressSubmitButton = async () => {
-    let authChecker = new AuthCheck();
-    authChecker
-      .check({
+      Keyboard.dismiss();
+      let authChecker = new AuthCheck();
+      await authChecker.check({
         email: this.state.username,
         password: this.state.password
-      })
-      .then(responseJson => {
-        Keyboard.dismiss();
+      }).then(responseJson => {
         this.props.globalData.setBearerToken(responseJson.token);
-        //this.props.globalData.setCurrentUser(responseJson);
         storeData = async () => {
+          const { username, password } = this.state;
           try {
-            await AsyncStorage.setItem('@capousername', this.state.username);
-            await AsyncStorage.setItem('@capopassword', this.state.password);
+            await AsyncStorage.setItem("@capousername", username);
+            await AsyncStorage.setItem("@capopassword", password);
           } catch (e) {
-            console.log(e);
+            console.log(e)
           }
         };
         storeData();
-        //this.props.navigation.navigate('CapoHome');
 
-        let nav = this.props.navigation
+        let nav = this.props.navigation;
         function navToCapoHome() {
-            nav.navigate('CapoHome')
+          nav.navigate('CapoHome')
         }
-        this.props.globalData.setCurrentUser(responseJson, navToCapoHome);
+        this.props.globalData.setCurrentUser(responseJson, navToCapoHome)
+      }).catch(err => {
+        Toast.show(`${err}`)
       })
-      .catch(
-        //if I was a good person I'd give you an error message but I'm tired
-        //it wasn't here when I started either, give me a break
-      );
   };
 }
 
@@ -177,7 +176,11 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 18,
     padding: 8,
-    paddingLeft: 15
+    paddingLeft: 8,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    marginLeft: 15,
+    marginRight: 15
   },
   bigButton: {
     backgroundColor: DefaultColors.ButtonBackground,
