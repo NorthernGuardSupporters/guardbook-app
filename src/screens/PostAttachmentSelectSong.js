@@ -23,8 +23,8 @@ class SongRow extends React.Component {
         const song = this.props.song;
 
         let referenceDisplay;
-        if (song.reference_title)
-            referenceDisplay = <RegularText style={styles.reference}>{song.reference_title}</RegularText>
+        if (song.referenceTitle)
+            referenceDisplay = <RegularText style={styles.reference}>{song.referenceTitle}</RegularText>
 
         let lyrics = song.lyrics + "\n";
         lyrics = lyrics.substring(0, lyrics.indexOf("\n"));
@@ -90,7 +90,7 @@ class PostAttachmentSelectSong extends React.Component {
 
     isSearchMatch = (song) => {
         let isMatch = false;
-        ["title", "reference", "lyrics"].forEach((prop) => {
+        ["title", "reference", "lyrics", "category"].forEach((prop) => {
             if (song[prop] &&
                 song[prop].toLowerCase().includes(this.state.search.toLowerCase()))
                 isMatch = true;
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         paddingLeft: 12
     },
     lyrics: {
-        fontFamily: 'heebo',
+        fontFamily: Skin.Font_ParsedText,
         fontSize: 16,
         lineHeight: 24,
         flex: 1,

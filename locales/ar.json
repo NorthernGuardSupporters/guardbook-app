@@ -171,7 +171,7 @@
         "songbook": "SONGBOOK",
         "roster": "ROSTER",
         "events": "EVENTS ↗️",
-        "standings": "NPSL-MC STANDINGS ↗️",
+        "standings": "NISA STANDINGS ↗️",
         "shop": "MERCH SHOP ↗️",
         "volunteer": "VOLUNTEER ↗️",
         "instrumentation": "INSTRUMENTATION ↗️",
@@ -183,13 +183,20 @@
             "gonnascore": "We're gonna score on you, "
         },
         "post": {
-            "copied": "Copied"
+            "copied": "Copied",
+            "hidealerttitle": "Hide Post",
+            "hidealertmessage": "Are you sure you want to hide this post from the Feed?",
+            "hidealertcancel": "Cancel",
+            "hidealertconfirm": "Hide"
         },
         "postattachmentgknickname": {
             "gonnascore": "We're gonna score on you, "
         },
         "postattachmentmasstweet": {
             "tweettheplayers": "Tweet the Players"
+        },
+        "postattachmentmultitweet": {
+            "tweettheplayers": "Tweet them all!"
         },
         "songview": {
             "copiedtitle": "Copied title to clipboard",

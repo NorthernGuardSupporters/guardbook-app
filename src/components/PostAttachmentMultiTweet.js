@@ -1,24 +1,19 @@
 import React from 'react';
 import {
-    Image,
+    Linking,
     StyleSheet,
     TouchableOpacity,
     View
 } from 'react-native';
-import { BoldText, RegularText, MediumText } from '../components/StyledText';
+import { BoldText, RegularText, MediumText } from './StyledText';
 import { Ionicons } from '@expo/vector-icons';
 import FadeIn from 'react-native-fade-in-image';
 import { Skin, DefaultColors, Palette } from '../config/Settings';
 import containerStyle from './PostAttachmentContainerStyle';
 import i18n from "../../i18n";
 
-export default class PostAttachmentMassTweet extends React.Component {
+export default class PostAttachmentMultiTweet extends React.Component {
     render() {
-        const roster = this.props.roster;
-
-        let thumbnail = Skin.Roster_DefaultThumbnail;
-        if (roster.defaultThumbnail)
-            thumbnail = { uri: roster.defaultThumbnail };
 
         return (
             <View style={styles.container}>
@@ -27,25 +22,16 @@ export default class PostAttachmentMassTweet extends React.Component {
                     activeOpacity={0.2}
                     style={{ flex: 1 }}>
                     <View style={{ flex: 1, flexDirection: i18n.getFlexDirection() }}>
-                        <View style={styles.rowImageContainer}>
-                            <FadeIn>
-                                <Image
-                                    source={thumbnail}
-                                    style={{ width: 50, height: 50, borderRadius: 25 }}
-                                />
-                            </FadeIn>
-                        </View>
                         <View style={{ flex: 1 }}>
-                            <BoldText style={styles.title}>{roster.rosterTitle}</BoldText>
                             <View style={styles.tweetAllContainer}>
                                 <Ionicons
                                     name={'logo-twitter'}
                                     size={16}
                                     style={{
-                                        color: Palette.Sky,
+                                        color: Palette.Rouge,
                                         backgroundColor: 'transparent'
                                     }} />
-                                <RegularText style={styles.tweetAllText}>{i18n.t('components.postattachmentmasstweet.tweettheplayers')}</RegularText>
+                                <RegularText style={styles.tweetAllText}>{i18n.t('components.postattachmentmultitweet.tweettheplayers')}</RegularText>
                             </View>
                         </View>
                     </View>
@@ -55,8 +41,12 @@ export default class PostAttachmentMassTweet extends React.Component {
     }
 
     _handlePress = () => {
-        if (this.props.onPress)
-            this.props.onPress(this.props.roster);
+        const players = this.props.players;
+        var handleList = "";
+        for(player of players) {
+            handleList += "@" + player.twitter + "%20"
+        }
+        Linking.openURL('https://twitter.com/intent/tweet?text=' + handleList + '+')
     };
 }
 

@@ -5,7 +5,7 @@
     "owner": "ngsdetroit",
     "slug": "app",
     "privacy": "public",
-    "version": "1.7.1",
+    "version": "1.11.0",
     "primaryColor": "#A3D8F7",
     "icon": "./assets/ngs4.png",
     "orientation": "portrait",
@@ -35,9 +35,6 @@
       "iosDisplayInForeground": true,
       "color": "#A3D8F7"
     },
-    "platforms": [
-      "android",
-      "ios"
-    ]
+    "platforms": ["android", "ios"]
   }
 }

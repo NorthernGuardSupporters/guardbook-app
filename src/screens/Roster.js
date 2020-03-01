@@ -4,8 +4,10 @@ import {
   Image,
   Linking,
   Picker,
+  Platform,
   SectionList,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -15,6 +17,7 @@ import GlobalDataContainer from '../containers/GlobalDataContainer';
 import { Ionicons } from '@expo/vector-icons';
 import FadeIn from 'react-native-fade-in-image';
 import { ScrollView, RectButton } from 'react-native-gesture-handler';
+import ModalSelector from 'react-native-modal-selector';
 
 import NavigationOptions from '../config/NavigationOptions';
 import { NavigationActions } from 'react-navigation';
@@ -26,7 +29,7 @@ import { Colors, FontSizes, Layout } from '../constants';
 import Constants from 'expo-constants';
 
 import { find, propEq } from 'ramda';
-import { Palette, Skin } from '../config/Settings';
+import { Palette, Skin, Settings } from '../config/Settings';
 import i18n from "../../i18n";
 
 
@@ -36,9 +39,9 @@ class PlayerRow extends React.Component {
 
     let thumbnail = Skin.Roster_DefaultThumbnail;
     if (player.defaultThumbnail)
-      thumbnail = {uri: player.defaultThumbnail};
+      thumbnail = { uri: player.defaultThumbnail };
     if (player.thumbnail)
-      thumbnail = {uri: player.thumbnail};
+      thumbnail = { uri: player.thumbnail };
 
     let twitterDisplay;
     if (player.twitter) {
@@ -49,19 +52,19 @@ class PlayerRow extends React.Component {
             Linking.openURL('http://twitter.com/' + player.twitter);
           }}
         >
-          <Ionicons
-            name={'logo-twitter'}
-            size={30}
-            style={{
-              color: Palette.Sky,
-              marginTop: 3,
-              marginBottom: 3,
-              marginLeft: 10,
-              marginRight: 10,
-              backgroundColor: 'transparent'
-            }}
-          />
-        </TouchableOpacity>    
+        <Ionicons
+          name={'logo-twitter'}
+          size={30}
+          style={{
+            color: Palette.Rouge,
+            marginTop: 3,
+            marginBottom: 3,
+            marginLeft: 10,
+            marginRight: 10,
+            backgroundColor: 'transparent'
+          }}
+        />
+      </TouchableOpacity>
     }
     return (
       <View style={styles.row}>
@@ -70,7 +73,7 @@ class PlayerRow extends React.Component {
           activeOpacity={0.05}
           style={{ flex: 1 }}
         >
-          <View style={{flexDirection: i18n.getFlexDirection()}}>
+          <View style={{ flexDirection: i18n.getFlexDirection() }}>
             <View style={styles.rowAvatarContainer}>
               <FadeIn>
                 <Image
@@ -108,7 +111,7 @@ class Roster extends React.Component {
     headerTitle: i18n.t('screens.roster.title'),
     ...NavigationOptions
   };
-  
+
   state = {
     rosterTitle: i18n.t('screens.roster.title'),
     rosters: [],
@@ -135,8 +138,8 @@ class Roster extends React.Component {
     if (rosters.length > 0) {
       var currentRosterId = rosters[0]._id;
       //search for a default property. if present, override that to the current id.
-      for(let i = 0; i < rosters.length; i++) {
-        if(rosters[i].default) {
+      for (let i = 0; i < rosters.length; i++) {
+        if (rosters[i].default) {
           currentRosterId = rosters[i]._id;
         }
       }
@@ -146,28 +149,75 @@ class Roster extends React.Component {
     }
   }
 
+  sortPlayersNumber = (a, b) => {
+    let aNum = Number(a.squadNumber)
+    let bNum = Number(b.squadNumber)
+
+    if (!Number.isNaN(aNum) && !Number.isNaN(bNum))
+      return (aNum > bNum)
+
+    return (a.squadNumber > b.squadNumber)
+    // by happenstance, these conditions are all we need to sort "C"-numbered coaches to the bottom and handle 1 vs 2 digit squad numbers
+  }
+  sortPlayersName = (a, b) => {
+    return (a.name > b.name)
+  }
+  // TODO: sortPlayersPosition with priorities, sort by name or number if a tie? number probably
+
   render() {
     let listDisplay = null;
     let header = null;
 
-    if (this.state.rosters.length > 0)
-    {
+    let sortPlayersBy = "default";
+    if (Settings.Roster_SortPlayersBy)
+      if (["default", "number", "name"].includes(Settings.Roster_SortPlayersBy))
+        sortPlayersBy = Settings.Roster_SortPlayersBy;
+
+    if (this.state.rosters.length > 0) {
       let pickerItems = [];
-      this.state.rosters.forEach(element => {
-        pickerItems.push(<Picker.Item label={element.rosterTitle} value={element._id} key={element._id} />);
-      });
-      header = 
-        <Picker
-          mode='dropdown'
-          enabled={pickerItems.length > 1}
-          selectedValue={this.state.currentRosterID}
-          onValueChange={(itemValue) => this.setState({currentRosterID: itemValue})}
-        >
-          {pickerItems}
-        </Picker>
-  
+
+      if (Platform.OS === "ios") {
+        this.state.rosters.forEach(element => {
+          pickerItems.push({ key: element._id, label: element.rosterTitle });
+        });
+        header =
+          <ModalSelector
+            data={pickerItems}
+            selectedKey={this.state.currentRosterID}
+            onChange={(item) => this.setState({ currentRosterID: item.key })}>
+            <View style={{ flexDirection: i18n.getFlexDirection(), padding: 10, alignItems: "center" }}>
+              <Text style={{ flex: 1 }}>{this.state.rosters.find(roster => roster._id == this.state.currentRosterID).rosterTitle}</Text>
+              <Ionicons name={'md-arrow-dropdown'} />
+            </View>
+          </ModalSelector>
+      }
+      else {
+        let pickerItems = [];
+        this.state.rosters.forEach(element => {
+          pickerItems.push(<Picker.Item label={element.rosterTitle} value={element._id} key={element._id} />);
+        });
+        header =
+          <Picker
+            mode='dropdown'
+            enabled={pickerItems.length > 1}
+            selectedValue={this.state.currentRosterID}
+            onValueChange={(itemValue) => this.setState({ currentRosterID: itemValue })} >
+            {pickerItems}
+          </Picker>
+      }
+
       let currentRoster = this.state.rosters.find(element => element._id == this.state.currentRosterID);
       let playerData = currentRoster.players;
+
+      switch (sortPlayersBy) {
+        case "number":
+          playerData = playerData.sort(this.sortPlayersNumber)
+          break;
+        case "name":
+          playerData = playerData.sort(this.sortPlayersName)
+          break;
+      }
+
       // inherit defaults from Roster document and pass to Player
       playerData.forEach(element => {
         if (currentRoster.hasOwnProperty('defaultThumbnail'))
@@ -177,8 +227,8 @@ class Roster extends React.Component {
         if (currentRoster.hasOwnProperty('showPlayerSongs'))
           element.showPlayerSongs = currentRoster.showPlayerSongs;
       });
-  
-      listDisplay = 
+
+      listDisplay =
         <FlatList
           renderScrollComponent={props => <ScrollView {...props} />}
           data={playerData}
@@ -186,15 +236,25 @@ class Roster extends React.Component {
           keyExtractor={(item, index) => index.toString()}
         />
     }
-    else
-    {
-      header = 
-        <Picker>
-          <Picker.Item label={i18n.t('screens.roster.nosquadsfound')} />
-        </Picker>
-      listDisplay = <View style={{flex: 1}}/>
+    else {
+
+      if (Platform.OS === "ios") {
+        header =
+          <View style={{ flexDirection: i18n.getFlexDirection(), padding: 10, alignItems: "center" }}>
+            <Text style={{ flex: 1 }}>{i18n.t('screens.roster.nosquadsfound')}</Text>
+            <Ionicons name={'md-arrow-dropdown'} />
+          </View>
+      }
+      else {
+        header =
+          <Picker>
+            <Picker.Item label={i18n.t('screens.roster.nosquadsfound')} />
+          </Picker>
+      }
+
+      listDisplay = <View style={{ flex: 1 }} />
     }
-    
+
 
     return (
       <LoadingPlaceholder>
@@ -246,7 +306,7 @@ class Roster extends React.Component {
 
   _handlePressTwitterListButton = () => {
     let roster = this.state.rosters.find(element => element._id == this.state.currentRosterID)
-    this.props.navigation.navigate('TwitterList', {roster});
+    this.props.navigation.navigate('TwitterList', { roster });
   }
 }
 

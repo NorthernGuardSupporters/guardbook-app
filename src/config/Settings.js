@@ -12,6 +12,7 @@ export const FACEBOOK_URL = 'https://www.facebook.com/NGSDetroit';
 export const INSTAGRAM_URL = 'https://instagram.com/northernguard';
 export const WEBSITE_URL = 'https://noonelikes.us';
 export const HOOLIGAN_HYMNAL_SERVER_ADDRESS = 'https://guardbook-beta.herokuapp.com'
+// export const HOOLIGAN_HYMNAL_SERVER_ADDRESS = 'https://guardbook-beta.herokuapp.com'
 
 export const YOUTUBE_URL = 'https://www.youtube.com/user/NorthernGuardDCFC';
 export const SHOP_URL = 'https://noonelikes.us/shop/';
@@ -28,8 +29,13 @@ export const SMOKE_URL = 'https://noonelikes.us/donate/'
 
 // Common Images
 export const HOME_SCREEN_NAVBAR = require('../../assets/ngs3.png');
-//export const HOME_SCREEN_NAVBAR = require('../../assets/home-big-c-logo.png');
+export const HOME_NAVBAR_LOGO = require('../../assets/ngs3.png');
+//export const HOME_NAVBAR_LOGO = require('../../assets/home-big-c-logo.png');
 export const HOME_SCREEN_VIDEO_OVERLAY = require('../../assets/ngs3.png');
+export const HOME_VIDEO = require('../../assets/5MB_video.mp4');
+export const HOME_VIDEO_OVERLAY = require('../../assets/ngs3.png');
+export const DRAWER_HERO_BACKGROUND = require('../../assets/drawer-prideraiser-background.jpg');
+export const DRAWER_HERO_OVERLAY = require('../../assets/ngs3.png');
 // like social media icons
 export const PRIDERAISER_ICON = require('../../assets/prideraiser.png');
 export const GOFUNDME_ICON = require('../../assets/gofundme.png');
@@ -52,7 +58,9 @@ export const Palette = {
   Black: '#000000',
   Prideraiser: '#a55eea',
   Gold: '#c7990b',
-  Rouge: '#5a0204'
+  Rouge: '#5a0204',
+  YellowCard: '#ffcc00',
+  RedCard: '#ff0000'
 };
 
 export const DefaultColors = {
@@ -68,15 +76,49 @@ export const DefaultColors = {
   Secondary: Palette.White
 }
 
+// NOTE: Heebo is a Chattahooligan-brand font.
+/*
+  You can use your own fonts in Hooligan Hymnal by including files in /assets/
+  and editing App.js. Look for Font.loadAsync() to see how fonts are loaded and registered as strings
+
+  Default fonts are included in /assets/ and the proper config values are...
+  Font_Regular: 'open-sans',
+  Font_Medium: 'open-sans-semibold',
+  Font_Bold: 'open-sans-bold',
+  Font_ParsedText: 'open-sans',
+
+  Font_Light is currently unused in the app.
+*/
 export const Skin = {
+  Font_Light: 'heebo-light',
+  Font_Regular: 'heebo',
+  Font_Medium: 'heebo-medium',
+  Font_Bold: 'heebo-bold',
+  Font_ParsedText: 'heebo',
+  Channel_Background: DefaultColors.Secondary,
+  Channel_DescriptionLabel: DefaultColors.Primary,
+  Channel_LoadMoreActivityIndicator_Android: DefaultColors.Primary,
+  Channel_LoadMoreActivityIndicator_iOS: DefaultColors.Primary,
+  Channel_NameLabel: DefaultColors.Primary,
+  Channel_Refresh_Android: DefaultColors.Secondary,
+  Channel_RefreshBackground_Android: DefaultColors.Primary,
+  Drawer_HeroBackground: DRAWER_HERO_BACKGROUND,
+  Drawer_HeroOverlay: DRAWER_HERO_OVERLAY,
   Home_BackgroundColor: DefaultColors.Primary,
   Songbook_Background: Palette.White,
   Home_BigButtonsBackground: DefaultColors.ButtonBackground,
   Home_BigButtonsLabel: DefaultColors.ButtonText,
   Home_FindTheMenuLabel: DefaultColors.Primary,
-  Home_SocialButtons: DefaultColors.Primary,
-  Home_Website: Palette.Black,
+  Home_LoadMoreActivityIndicator_Android: DefaultColors.Secondary,
+  Home_LoadMoreActivityIndicator_iOS: Palette.White,
+  Home_NavbarLogo: HOME_NAVBAR_LOGO,
   Home_PostMarginVertical: 6,
+  Home_Refresh_Android: DefaultColors.Primary,
+  Home_RefreshBackground_Android: DefaultColors.Secondary,
+  Home_SocialButtons: DefaultColors.Primary,
+  Home_Video: HOME_VIDEO,
+  Home_VideoOverlay: HOME_VIDEO_OVERLAY,
+  Home_Website: Palette.Black,
   ModalLoader_ActivityIndicator: DefaultColors.Primary,
   ModalLoader_Background: DefaultColors.Secondary,
   ModalLoader_Container: "#00000040",
@@ -89,13 +131,19 @@ export const Skin = {
   Player_DefaultImage: CLUB_LOGO,
   Player_TopContainerBackground: DefaultColors.NavigationBarBackground,
   Post_DefaultChannelThumbnail: require('../../assets/ngs3.png'),
+  Post_ChannelLabel: DefaultColors.ColorText,
+  Post_FontSize: 17,
+  Post_LineHeight: 22,
+  Post_LinkColor: "blue",
+  Post_TextColor: DefaultColors.Text,
+  Post_TimestampLabel: DefaultColors.ColorText,
   Roster_DefaultThumbnail: CLUB_LOGO,
   Roster_TabBackground: DefaultColors.ButtonBackground,
   Roster_ActiveTabIndicator: DefaultColors.ButtonText,
   Roster_ActiveTabLabel: DefaultColors.ButtonText,
   Roster_InactiveTabLabel: DefaultColors.Secondary,
   Roster_FriendsTabIcon: 'md-heart',
-  Roster_FoesTabIcon: 'md-thumbs-down',
+  Roster_FoesTabIcon: 'md-thumbs-down'
 };
 
 /*
@@ -115,6 +163,14 @@ export const socialButtons = [
       //,
       //{ image: GOFUNDME_BW_ICON, url: GOFUNDME_URL, tintToSkin: true }
     ]
+  },
+  {
+    header: i18n.t('settings.other'),
+    headerColor: DefaultColors.ColorText,
+    items: [
+      // { image: BAD_PODCAST_423_ICON, url: BAD_PODCAST_423_URL, tintToSkin: false },
+      // { image: BAD_PODCAST_109_ICON, url: BAD_PODCAST_109_URL, tintToSkin: false },
+    ]
   }
   //,
   //{
@@ -130,7 +186,7 @@ export const socialButtons = [
 // Other/Seasonal
 // { icon: 'md-browsers', url: WEBSITE_URL },
 // { image: PRIDERAISER_ICON, url: PRIDERAISER_URL },
-// { image: GOFUNDME_ICON, url: GOFUNDME_URL }
+// { image: GOFUNDME_BW_ICON, url: GOFUNDME_URL, tintToSkin: true }
 
 /*
   "Headline" banners on home screen
@@ -144,7 +200,36 @@ export const banners = [
 /*
   App Feature Flags
 */
+// CapoHome_GKNicknameEnabled: true, false
+//      This is a longrunning inside joke in Chattanooga
+// Channels_Enabled: true, false
+//      Some SGs will only ever have one channel
+//      and tapping into a whole hunk of UI will be jarring and confusing to users
+// Home_PostsPerPage: number
+//      Load this many news feed items, then load this many more if the user scrolls to the bottom
+// Player_ShowSongs: true, false
+//      Some SGs write songs for each player
+//      Toggle a related UI element in the Roster/Player screen
+// PostCreate_UploadImageEnabled: true, false
+//      Some SGs may not want to pay for image hosting, turn the feature off entirely if so
+// RefereeCards_Show: true, false
+//      Show yellow/red card icons in the nav drawer
+// Roster_SortPlayersBy: "default", "number", "name"
+//      later- "position" with priority
+//      (hopefully this gets deprecated and replaced with something in the UI later)
+// RosterFoes_DefaultCompetition: string
+//      Matches .competition field of objects from the database foes collection
+//      This field is case sensitive and must match exactly
 export const Settings = {
-  Player_ShowSongs: false,
+  Player_ShowSongs: true,
   CapoHome_GKNicknameEnabled: true,
+  ChannelUI_Enabled: false,
+  RefereeCards_Show: false,
+  Roster_SortPlayersBy: "number",
+  RosterFoes_DefaultCompetition: "2020 NISA Spring Showcase",
+  Home_PostsPerPage: 5,
+  ImageResizeQuality: 1,
+  ImageResizeDimensions: { larger: 1216, smaller: 912 },
+  Juanstagram: false,
+  PostCreate_UploadImageEnabled: true,
 }

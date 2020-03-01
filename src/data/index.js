@@ -36,7 +36,7 @@ const DEFAULT_SONG = {
   reference_title: '',
   reference_link: '',
   instructions: '',
-  player_id: -1,
+  playerId: -1,
   override_html: '',
   delete_local: ''
 };

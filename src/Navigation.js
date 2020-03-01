@@ -1,8 +1,10 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
 import Screens from './screens';
 import CustomDrawer from './components/CustomDrawer';
+import NavigationOptions from './config/NavigationOptions';
+import { Palette } from './config/Settings';
 import i18n from "../i18n";
 
 const { width: deviceWidth } = Dimensions.get('window');
@@ -28,7 +30,8 @@ const HomeNavigation = StackNavigator(
     SinglePost: { screen: Screens.SinglePost },
     SingleSong: { screen: Screens.SingleSong },
     Player: { screen: Screens.Player },
-    TwitterList: { screen: Screens.TwitterList }
+    TwitterList: { screen: Screens.TwitterList },
+    Channel: { screen: Screens.Channel }
   },
   {
     ...DefaultStackConfig,
@@ -196,6 +199,35 @@ const AboutNavigation = StackNavigator(
   }
 );
 
+const RedCard = () => (<Screens.RefereeCard name="RedCard" color={Palette.RedCard} />)
+const YellowCard = () => (<Screens.RefereeCard name="YellowCard" color={Palette.YellowCard} />)
+const RedCardNavigation = StackNavigator(
+  {
+    RedCard
+  },
+  {
+    navigationOptions: {
+      ...NavigationOptions,
+      title: i18n.t('screens.refereecard.titlered'),
+      headerStyle: { backgroundColor: Palette.RedCard },
+      drawerLabel: () => null
+    }
+  }
+);
+const YellowCardNavigation = StackNavigator(
+  {
+    YellowCard
+  },
+  {
+    navigationOptions: {
+      ...NavigationOptions,
+      title: i18n.t('screens.refereecard.titleyellow'),
+      headerStyle: { backgroundColor: Palette.YellowCard },
+      drawerLabel: () => null
+    }
+  }
+);
+
 const Drawer = DrawerNavigator(
   {
     Home: { screen: HomeNavigation },
@@ -207,8 +239,10 @@ const Drawer = DrawerNavigator(
     //Roots: { screen: LetsMakeRootsNavigation },
     //Smoke: { screen: SmokeNavigation },
     CapoHome: { screen: CapoHomeNavigation },
-    About: { screen: AboutNavigation }
+    About: { screen: AboutNavigation },
     //Instrumentation: {screen: InstrumentationNavigation },
+    RedCard: { screen: RedCardNavigation },
+    YellowCard: { screen: YellowCardNavigation },
   },
   {
     contentComponent: props => <CustomDrawer {...props} />,

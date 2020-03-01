@@ -39,7 +39,8 @@
             "title": "Tablero de Capo",
             "selectsong": "Elige una canción",
             "composesong": "Compone Una Canción",
-            "gknickname": "Apodo de Portero"
+            "gknickname": "Apodo de Portero",
+            "logout": "Logout"
         },
         "capologin": {
             "title": "Tablero de Capo",
@@ -186,13 +187,20 @@
             "gonnascore": "We're gonna score on you, "
         },
         "post": {
-            "copied": "Copied"
+            "copied": "Copied",
+            "hidealerttitle": "Hide Post",
+            "hidealertmessage": "Are you sure you want to hide this post from the Feed?",
+            "hidealertcancel": "Cancel",
+            "hidealertconfirm": "Hide"
         },
         "postattachmentgknickname": {
             "gonnascore": "We're gonna score on you, "
         },
         "postattachmentmasstweet": {
             "tweettheplayers": "Tweet the Players"
+        },
+        "postattachmentmultitweet": {
+            "tweettheplayers": "Tweet them all!"
         },
         "songview": {
            "copiedtitle": "Título copiado al portapapeles",

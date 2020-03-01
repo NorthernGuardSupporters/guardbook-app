@@ -36,7 +36,8 @@
             "title": "Menu",
             "selectsong": "Selecionar hino",
             "composesong": "Compor hino",
-            "gknickname": "Apelido do goleiro"
+            "gknickname": "Apelido do goleiro",
+            "logout": "Logout"
         },
         "capologin": {
             "title": "Menu",
@@ -171,7 +172,7 @@
         "songbook": "REPERTORIO",
         "roster": "ELENCO",
         "events": "EVENTOS ↗️",
-        "standings": "NPSL-MC TABELA DE CLASSIFICACAO ↗️",
+        "standings": "NISA TABELA DE CLASSIFICACAO ↗️",
         "shop": "LOJA DO TIME ↗️",
         "volunteer": "SE INSCREVA COMO VOLUNTARIO ↗️",
         "instrumentation": "MELODIAS ↗️",
@@ -183,13 +184,20 @@
             "gonnascore": "We're gonna score on you, "
         },
         "post": {
-            "copied": "Copied"
+            "copied": "Copied",
+            "hidealerttitle": "Hide Post",
+            "hidealertmessage": "Are you sure you want to hide this post from the Feed?",
+            "hidealertcancel": "Cancel",
+            "hidealertconfirm": "Hide"
         },
         "postattachmentgknickname": {
             "gonnascore": "We're gonna score on you, "
         },
         "postattachmentmasstweet": {
             "tweettheplayers": "Tweet the Players"
+        },
+        "postattachmentmultitweet": {
+            "tweettheplayers": "Tweet them all!"
         },
         "songview": {
             "copiedtitle": "Titulo copiado no clipboard",

@@ -62,7 +62,7 @@ class Player extends React.Component {
   setData = () => {
     let player = this.props.navigation.state.params.player;
     let playerSongs = [];
-    playerSongs = this.props.globalData.state.songs.filter(song => song.player_id === player._id)
+    playerSongs = this.props.globalData.state.songs.filter(song => song.playerId === player._id)
 
     this.setState({ playerSongs });
   }
@@ -138,7 +138,7 @@ class Player extends React.Component {
     let playerImage = Skin.Player_DefaultImage;
     if (player.defaultImage)
       playerImage = { uri: player.defaultImage };
-    if (player.images.length > 0)
+    if (player.images && player.images.length > 0)
       playerImage = { uri: player.images[0] };
 
     if (this.state.playerSongs.length === 0) {
@@ -239,7 +239,7 @@ class Player extends React.Component {
               <RegularText> {player.flag}</RegularText>
             </View>
             <RegularText style={styles.headerText}>
-              {player.position}
+              {i18n.t('positions.' + player.position)}
             </RegularText>
             {playerSocialDisplay}
           </View>
@@ -272,7 +272,7 @@ class Player extends React.Component {
               </ParsedText>
               <RegularText style={styles.bodyText}></RegularText>
             </ReadMore>
-            <Text>{Settings.Player_ShowSongs && playerSongDisplay}</Text>
+            {Settings.Player_ShowSongs && playerSongDisplay}
           </AnimatableView>
         </AnimatedScrollView>
 
@@ -287,8 +287,7 @@ class Player extends React.Component {
           renderLeftButton={() => (
             <View
               style={{
-                // gross dumb things
-                paddingTop: Platform.OS === 'android' ? 10 : 0,
+                paddingTop: 10,
                 marginTop: Layout.notchHeight > 0 ? -5 : 0
               }}
             >
@@ -322,7 +321,7 @@ class Player extends React.Component {
         hitSlop={{ top: 15, left: 15, right: 15, bottom: 15 }}
         onPress={handlePress}
       >
-        <MediumText style={{ color: Rouge, marginTop: 5 }}>
+        <MediumText style={{ color: Palette.Rouge, marginTop: 5 }}>
           {i18n.t('screens.player.readmore')}
         </MediumText>
       </TouchableOpacity>

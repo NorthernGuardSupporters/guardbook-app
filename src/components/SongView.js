@@ -20,12 +20,12 @@ export default class SongView extends React.Component {
     let referenceDisplay;
     let playButtonDisplay;
     let sheetMusicDisplay;
-    if (song.reference_title)
-      referenceDisplay = <RegularText style={styles.reference} onLongPress={this._onLongPressReference}>{song.reference_title}</RegularText>
-    if (song.reference_link)
+    if (song.referenceTitle)
+      referenceDisplay = <RegularText style={styles.reference} onLongPress={this._onLongPressReference}>{song.referenceTitle}</RegularText>
+    if (song.referenceLink)
       playButtonDisplay = <TouchableOpacity style={{top: 0, bottom: 0, paddingHorizontal: 6,
                             backgroundColor: Palette.White}}
-                            onPress={() => {WebBrowser.openBrowserAsync(song.reference_link)}}>
+                            onPress={() => {WebBrowser.openBrowserAsync(song.referenceLink)}}>
                             <Ionicons
                               name={'md-play-circle'}
                               size={50}
@@ -118,7 +118,7 @@ export default class SongView extends React.Component {
 
   _onLongPressReference = () => {
     Toast.show(i18n.t('components.songview.copiedreference'));
-    Clipboard.setString(this.props.song.reference_title);
+    Clipboard.setString(this.props.song.referenceTitle);
   };
 
   _onLongPressLyrics = () => {
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     writingDirection: i18n.getWritingDirection()
   },
   lyrics: {
-    fontFamily: 'heebo',
+    fontFamily: Skin.Font_ParsedText,
     fontSize: 18,
     lineHeight: 24,
     flex: 1,
